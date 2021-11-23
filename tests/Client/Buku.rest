@@ -1,0 +1,161 @@
+@controller=http://192.168.1.9/perpusstimik/webapp/public/api/buku
+@token = Bearer 2|RYFJHOZhA0jxNi3IZ4ZsIwexdbAWOftlRWeFqoo5
+
+get {{controller}}  HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+### 
+
+get {{controller}}/1  HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+###
+
+get {{controller}}/CekKetersediaan/1  HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+###
+
+POST {{controller}}  HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "kode": "H1252525",
+    "judul": "Pemograman C#",
+    "penerbit": "Test Penerbit",
+    "kategori": "Kategori",
+    "edisi": "I",
+    "bibliografi":"test",
+    "isbn":"125252",
+    "deskripsi":"asdasd",
+    "tahun":"2020",
+    "kota":"Jayapura",
+    "penulis": "Yoseph Kungkung"
+}
+
+###
+
+get {{controller}}/1/tambahbuku/2  HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+###
+
+put {{controller}}/1 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+
+{
+    "id": 1,
+    "kode": "H1252525",
+    "judul": "Pemograman C# 9 Pro",
+    "edisi": "I",
+    "bibliografi": "test",
+    "pengarang": "Yoseph Kungkung",
+    "kategori": "Kategori",
+    "isbn": "125252",
+    "penerbit": "Test Penerbit",
+    "tahun": 2020,
+    "kota": "Jayapura",
+    "deskripsi": "asdasd",
+    "created_at": "2021-09-21T03:46:50.000000Z",
+    "updated_at": "2021-09-21T03:46:50.000000Z",
+    "items": [
+      {
+        "id": 1,
+        "nomorseri": 1,
+        "jenis_id": 1,
+        "jenis": "buku",
+        "statuspinjam": "tersedia",
+        "keadaan": "baik",
+        "catatan": "",
+        "created_at": "2021-09-21T03:46:55.000000Z",
+        "updated_at": "2021-09-21T03:46:55.000000Z"
+      },
+      {
+        "id": 2,
+        "nomorseri": 2,
+        "jenis_id": 1,
+        "jenis": "buku",
+        "statuspinjam": "tersedia",
+        "keadaan": "baik",
+        "catatan": "",
+        "created_at": "2021-09-21T03:46:55.000000Z",
+        "updated_at": "2021-09-21T03:46:55.000000Z"
+      },
+      {
+        "id": 3,
+        "nomorseri": 3,
+        "jenis_id": 1,
+        "jenis": "buku",
+        "statuspinjam": "tersedia",
+        "keadaan": "baik",
+        "catatan": "",
+        "created_at": "2021-09-21T03:47:59.000000Z",
+        "updated_at": "2021-09-21T03:47:59.000000Z"
+      },
+      {
+        "id": 4,
+        "nomorseri": 4,
+        "jenis_id": 1,
+        "jenis": "buku",
+        "statuspinjam": "tersedia",
+        "keadaan": "baik",
+        "catatan": "",
+        "created_at": "2021-09-21T03:47:59.000000Z",
+        "updated_at": "2021-09-21T03:47:59.000000Z"
+      },
+      {
+        "id": 5,
+        "nomorseri": 5,
+        "jenis_id": 1,
+        "jenis": "buku",
+        "statuspinjam": "tersedia",
+        "keadaan": "baik",
+        "catatan": "",
+        "created_at": "2021-09-21T03:48:40.000000Z",
+        "updated_at": "2021-09-21T03:48:40.000000Z"
+      },
+      {
+        "id": 6,
+        "nomorseri": 6,
+        "jenis_id": 1,
+        "jenis": "buku",
+        "statuspinjam": "tersedia",
+        "keadaan": "baik",
+        "catatan": "",
+        "created_at": "2021-09-21T03:48:41.000000Z",
+        "updated_at": "2021-09-21T03:48:41.000000Z"
+      },
+      {
+        "id": 11,
+        "nomorseri": 7,
+        "jenis_id": 1,
+        "jenis": "buku",
+        "statuspinjam": "tersedia",
+        "keadaan": "baik",
+        "catatan": "",
+        "created_at": "2021-09-21T04:07:17.000000Z",
+        "updated_at": "2021-09-21T04:07:17.000000Z"
+      },
+      {
+        "id": 12,
+        "nomorseri": 8,
+        "jenis_id": 1,
+        "jenis": "buku",
+        "statuspinjam": "tersedia",
+        "keadaan": "baik",
+        "catatan": "",
+        "created_at": "2021-09-21T04:07:18.000000Z",
+        "updated_at": "2021-09-21T04:07:18.000000Z"
+      }
+    ]
+  }
+###
+
+###

@@ -1,0 +1,3 @@
+@controller=http://localhost:8000/api/anggota
+@token = Bearer 8|j0XhF4bou1eBmct0EIzCyHi46V7joIjETlqkZt8u
+

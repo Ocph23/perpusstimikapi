@@ -1,0 +1,47 @@
+@controller=http://192.168.1.9/perpusstimik/webapp/public/api/penelitian
+@token =Bearer 1|BssOV3GZr54gl9rMYGkV34d6TLAlQpEmV0N6qB40
+
+
+
+get {{controller}}  HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+###
+
+
+
+get {{controller}}/1 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+###
+
+
+POST {{controller}}  HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "kode": "123213123",
+    "penulis": "Yoseph Kungkung",
+    "npm": "Test Penerbit",
+    "judul": "apakek",
+    "jurusan": "jurusan",
+    "topik": "tentang A",
+    "jenis": "skripsi",
+    "pembimbing":"dosen A",
+    "deskripsi":"asdasd",
+    "tahun":"2020",
+    "kota":"Jayapura"
+}
+
+###
+
+get {{controller}}/1/tambahpenelitian/1  HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+###
+
+###
