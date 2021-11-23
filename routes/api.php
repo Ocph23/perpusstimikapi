@@ -35,7 +35,7 @@ Route::post('buku/uploadcover/{id}', [BukuController::class, 'uploadcover'])->na
 Route::get('buku/CekKetersediaan/{id}', [BukuController::class, 'CekKetersediaan'])->name('CekKetersediaan')->middleware('auth:sanctum');
 Route::post('buku/uploadbibliografi/{id}', [BukuController::class, 'uploadbibliografi'])->name('uploadbibliografi')->middleware('auth:sanctum');
 Route::get('penelitian/{id}/tambahpenelitian/{count}', [PenelitianController::class, 'tambahpenelitian'])->name('tambahpenelitian')->middleware('auth:sanctum');
-Route::post('penelitian/uploadcover/{id}', [PenelitianController::class, 'uploadcover'])->name('uploadcover')->middleware('auth:sanctum');
+Route::post('penelitian/uploadcover/{id}', [PenelitianController::class, 'uploadcover'])->name('penelitianuploadcover')->middleware('auth:sanctum');
 
 Route::get('peminjaman/byKaryaItemId/{id}', [PeminjamanController::class, 'byKaryaItemId'])->name('byKaryaItemId')->middleware('auth:sanctum');
 Route::get('setting/last', [SettingController::class, 'getlast'])->name('getlast')->middleware('auth:sanctum');
