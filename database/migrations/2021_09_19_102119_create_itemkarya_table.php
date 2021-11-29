@@ -15,7 +15,7 @@ class CreateItemkaryaTable extends Migration
     {
         Schema::create('itemkarya', function (Blueprint $table) {
             $table->id();
-            $table->integer('nomorseri');
+            $table->text('nomorseri');
             $table->foreignId('jenis_id');
             $table->enum('jenis', ['buku', 'penelitian']);
             $table->enum('statuspinjam', ['tersedia', 'dipinjam', 'dipesan']);

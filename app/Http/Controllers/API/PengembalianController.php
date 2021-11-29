@@ -65,7 +65,7 @@ class PengembalianController extends BaseController
             }
             $data=[];
             $data['tanggal']= new DateTime($input['tanggal']);
-            $data['peminjamanId']=$input['peminjaman']['id'];
+            $data['peminjamanid']=$input['peminjaman']['id'];
             $model = Pengembalian::create($data);
             $items = [];
             foreach ($input['items'] as $key => $value) {
@@ -80,19 +80,19 @@ class PengembalianController extends BaseController
                 $pinjamanItem->save();
             }
 
-            $peminjaman = Peminjaman::find($data['peminjamanId']);
+            $peminjaman = Peminjaman::find($data['peminjamanid']);
             if($peminjaman!=null){
                $peminjamanItems=$peminjaman->items;
                 if(!$peminjamanItems->where("statuskembali","belum")->count())
                 {
-                    $peminjaman->status="sukses";
+                    $peminjaman->status="kembali";
                     $peminjaman->save();
                 }
             }
 
 
             DB::commit();
-            return $this->sendResponse(new PengembalianResource($model), 'Post created.');
+            return $this->sendResponse(true, 'Post created.');
         } catch (\Exception $e) {
             DB::rollBack();
             $message = $this->errorMessage($e);
@@ -106,12 +106,15 @@ class PengembalianController extends BaseController
 
         $model = Pengembalian::find($id);
         if ($model) {
-            $model->anggota = $model->anggota;
+            $model->peminjaman = new PeminjamanResource($model->peminjaman);
             $model->items = $model->items;
             foreach ($model->items as $key => $value) {
-                $result = $value->ItemKarya->parent;
+                $result = $value->PeminjamanItem->ItemKarya->parent;
                 $a = 1;
             }
+
+
+
         }
         return $this->sendResponse($model == null ? $model : new PengembalianResource($model), 'Posts fetched.');
     }

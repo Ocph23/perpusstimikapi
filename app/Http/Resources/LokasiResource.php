@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PengembalianResource extends JsonResource
+class LokasiResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,8 @@ class PengembalianResource extends JsonResource
     {
         return [
             'id'=> $this->id,
-            'kode'=> "KMB". $this->id,
-            'peminjaman'=> $this->peminjaman,
-            'tanggal'=> $this->tanggal,
-            'items'=> $this->items,
+            'nama'=> $this->nama,
+            'keterangan'=> $this->keterangan,
             'updated_at'=> $this->updated_at,
             'created_at'=> $this->created_at,
         ];

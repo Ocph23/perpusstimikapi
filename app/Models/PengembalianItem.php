@@ -24,8 +24,8 @@ class PengembalianItem extends Model
         return $this->belongsTo(Pengembalian::class,'pengembalianId');
     }
 
-    public function ItemKarya()
+    public function PeminjamanItem()
     {
-        return $this->belongsTo(ItemKarya::class,'karyaitemId');
+        return $this->belongsTo(PeminjamanItem::class,'peminjamanItemId');
     }
 }

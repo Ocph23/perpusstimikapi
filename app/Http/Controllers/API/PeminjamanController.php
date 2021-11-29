@@ -48,6 +48,8 @@ class PeminjamanController extends BaseController
             foreach($value->items as $k=>$v){
                 $v->ItemKarya = $v->ItemKarya;
                 $v->ItemKarya->parent = $v->ItemKarya->parent;
+                $v->ItemKarya = new ItemKaryaResource($v->ItemKarya);
+
             }         
 
 
@@ -125,7 +127,7 @@ class PeminjamanController extends BaseController
             $model->items = $model->items;
             foreach ($model->items as $key => $value) {
                 $result = $value->ItemKarya->parent;
-                $a = 1;
+                $value->ItemKarya = new ItemKaryaResource($value->ItemKarya);
             }
         }
         return $this->sendResponse($model == null ? $model : new PeminjamanResource($model), 'Posts fetched.');
@@ -159,9 +161,16 @@ class PeminjamanController extends BaseController
     public function byKaryaItemId($id)
     {
         try {
-            $dataItem = PeminjamanItem::where('karyaitem_id', $id)
+            
+            $itemKarya = ItemKarya::where('nomorseri', $id)
+                ->first();
+            if(!$itemKarya)
+                throw new Exception('Item Buku tidak ditemukan !');
+
+            $dataItem = PeminjamanItem::where('karyaitem_id', $itemKarya->id)
                 ->where('statuskembali', 'belum')
                 ->first();
+
             if ($dataItem) {
                 $model = Peminjaman::where('id', $dataItem['peminjaman_id'])->first();
                 if ($model) {
@@ -174,11 +183,12 @@ class PeminjamanController extends BaseController
                 }
                 return $this->sendResponse($model == null ? $model : new PeminjamanResource($model), 'Posts fetched.');
             } else {
-                throw new Exception('Item Buku tidak ditemukan !');
+                throw new Exception('Item Peminjaman  tidak ditemukan !');
             }
         } catch (\Throwable $th) {
             $message = $this->errorMessage($th);
             return $this->sendError($message, [], 400);
         }
     }
+
 }

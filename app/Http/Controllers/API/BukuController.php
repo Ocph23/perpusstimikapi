@@ -12,6 +12,7 @@ use App\Http\Resources\BukuResource;
 use App\Http\Resources\ItemKaryaResource;
 use Spatie\Async\Pool;
 use App\Services\HelperService;
+use Illuminate\Support\Facades\DB;
 
 class BukuController extends BaseController
 {
@@ -73,6 +74,37 @@ class BukuController extends BaseController
     }
 
 
+    public function itemhistory($id)
+    {
+        try {
+           
+            $result = DB::select("SELECT
+            peminjaman_item.karyaitem_id,
+            peminjaman_item.tanggal_kembali,
+            peminjaman_item.statuskembali,
+            peminjaman.created_at,
+            anggota.nomor_induk,
+            anggota.nama
+          FROM
+            peminjaman_item
+            LEFT JOIN peminjaman ON peminjaman_item.peminjaman_id =
+          peminjaman.id
+            LEFT JOIN anggota ON peminjaman.anggotaid = anggota.id
+              where karyaitem_id=?  
+              ORDER BY  peminjaman.created_at DESC",[$id]);
+            return $this->sendResponse($result, "Data Tidak Ditemukan !");
+        } catch (\Throwable $th) {
+            return $this->sendError($th->$th->getMessagge(), [], 400);
+        }
+    }
+
+
+    
+
+
+
+
+
     public function update(Request $request, $id)
     {
         $input = $request->all();
@@ -118,8 +150,8 @@ class BukuController extends BaseController
     public function tambahbuku($id, $count)
     {
         $model = Buku::find($id);
-        $item = $model->items->last();
-        $lastSerie = $item ? $item->nomorseri : 0;
+        $item = $model->items->count();
+        $lastSerie = $item ? $item : 0;
         if (is_null($model)) {
             return $this->sendError('Post does not exist.');
         }
@@ -128,7 +160,7 @@ class BukuController extends BaseController
         $value = new BukuResource($model);
         for ($i = 0; $i < $count; $i++) {
             $lastSerie++;
-            $item = ["jenis_id" => $value->id, "nomorseri" => $lastSerie, "jenis" => "buku", "catatan" => ""];
+            $item = ["jenis_id" => $value->id, "nomorseri" => $model->kode."-".$lastSerie, "jenis" => "buku", "catatan" => ""];
             $results[] = ItemKarya::create($item);
         }
         return $this->sendResponse(ItemKaryaResource::collection($results), 'Post fetched.');

@@ -16,15 +16,15 @@ class ItemKaryaResource extends JsonResource
     {
         return [
             'id'=> $this->id,
-            'nomorseri'=> $this->nomorseri,
+            'nomorseri'=>  $this->nomorseri,
             'jenis_id'=> $this->jenis_id,
             'jenis'=> $this->jenis,
             'keadaan'=> $this->keadaan,
             'statuspinjam'=> $this->statuspinjam,
             'catatan'=> $this->catatan,
+            'parent'=> $this->parent,
             'updated_at'=> $this->updated_at,
             'created_at'=> $this->created_at,
-            'nomorview'=> sprintf('%04d',$this->nomorseri),
         ];
     }
 }
