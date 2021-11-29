@@ -23,8 +23,8 @@ class LokasiController extends BaseController
 
     public function index()
     {
-        $Lokasi = Lokasi::all();
-        return $this->sendResponse(LokasiResource::collection($Lokasi), 'Posts fetched.');
+        $lokasi = Lokasi::all();
+        return $this->sendResponse(LokasiResource::collection($lokasi), 'Posts fetched.');
     }
 
     public function store(Request $request)
@@ -51,8 +51,8 @@ class LokasiController extends BaseController
     public function show($id)
     {
         try {
-            $Lokasi = Lokasi::find($id);
-            return $this->sendResponse($Lokasi, "Data Tidak Ditemukan !");
+            $lokasi = Lokasi::find($id);
+            return $this->sendResponse($lokasi, "Data Tidak Ditemukan !");
         } catch (\Throwable $th) {
             return $this->sendError($th->$th->getMessagge(), [], 400);
         }
