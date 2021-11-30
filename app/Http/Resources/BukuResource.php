@@ -28,6 +28,8 @@ class BukuResource extends JsonResource
         'kota' => $this->kota,
         'deskripsi' => $this->deskripsi ,
         'cover' => $this->cover ,
+        'lokasi_id' => $this->lokasi_id ,
+        'lokasi' => $this->lokasi ,
         'items' => $this->items ,
         'created_at' => $this->created_at,
         'updated_at' => $this->updated_at,

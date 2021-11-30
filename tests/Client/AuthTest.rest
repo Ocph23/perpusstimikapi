@@ -1,4 +1,5 @@
-@controller=https://perpusstimikapi.stimiksepnop.ac.id/api
+@controller=http://localhost:8000/api
+#@controller=https://perpusstimikapi.stimiksepnop.ac.id/api
 @token =Bearer 8|1qcgV4sZ5DIQ1Pi7yVJeFLN6sPkOQ8Cih0LkeC2O
 @tokenSimak =eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Ijg3OSIsIlVzZXJuYW1lIjoiMjAxNTExMDk5IiwiRW1haWwiOiJtYWhhc2lzd2FAbWFpbC5jb20iLCJOYW1hVXNlciI6IllPU0VQSCBLVU5HS1VORyIsIlJvbGVVc2VyIjpbeyJOYW1hIjoiTWFoYXNpc3dhIn1dLCJ0aW1lIjoxNjM2NzkyMjM4fQ.RaGHiluQg9p6Zyqy5Nr-DhPUKITHxrMf0HCFH5I0TSU
 POST {{controller}}/register  HTTP/1.1

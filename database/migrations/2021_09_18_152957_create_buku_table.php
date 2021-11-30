@@ -15,6 +15,7 @@ class CreateBukuTable extends Migration
     {
         Schema::create('buku', function (Blueprint $table) {
             $table->id();
+            $table->foreignId("lokasi_id");    
             $table->string('kode');
             $table->string('judul');
             $table->string('edisi')->nullable();

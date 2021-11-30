@@ -15,6 +15,7 @@ class CreatePenelitianTable extends Migration
     {
         Schema::create('penelitian', function (Blueprint $table) {
             $table->id();
+            $table->foreignId("lokasi_id");  
             $table->string('kode');
             $table->string('npm');
             $table->string('penulis');

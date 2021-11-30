@@ -18,7 +18,6 @@ use App\Http\Resources\PeminjamanResource;
 use App\Models\Peminjaman;
 use App\Models\PeminjamanItem;
 use App\Models\Pesanan;
-use App\Services\HelperService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -26,11 +25,7 @@ use Illuminate\Support\Facades\Log;
 class PengembalianController extends BaseController
 {
 
-    public function __construct(HelperService $service)
-    {
-        $this->helperService = $service;
-    }
-
+   
 
     public function index()
     {
@@ -89,8 +84,6 @@ class PengembalianController extends BaseController
                     $peminjaman->save();
                 }
             }
-
-
             DB::commit();
             return $this->sendResponse(true, 'Post created.');
         } catch (\Exception $e) {
@@ -112,9 +105,6 @@ class PengembalianController extends BaseController
                 $result = $value->PeminjamanItem->ItemKarya->parent;
                 $a = 1;
             }
-
-
-
         }
         return $this->sendResponse($model == null ? $model : new PengembalianResource($model), 'Posts fetched.');
     }
@@ -123,17 +113,13 @@ class PengembalianController extends BaseController
     public function update(Request $request, Pengembalian $model)
     {
         $input = $request->all();
-
         $validator = Validator::make($input, []);
-
         if ($validator->fails()) {
             return $this->sendError($validator->errors());
         }
-
         $model->title = $input['judul'];
         $model->description = $input['penerbit'];
         $model->save();
-
         return $this->sendResponse(new PengembalianResource($model), 'Post updated.');
     }
 

@@ -11,15 +11,11 @@ use App\Models\ItemKarya;
 use App\Http\Resources\LokasiResource;
 use App\Http\Resources\ItemKaryaResource;
 use Spatie\Async\Pool;
-use App\Services\HelperService;
 use Illuminate\Support\Facades\DB;
 
 class LokasiController extends BaseController
 {
-    public function __construct(HelperService $service)
-    {
-        $this->helperService = $service;
-    }
+   
 
     public function index()
     {

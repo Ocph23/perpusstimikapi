@@ -10,17 +10,12 @@ use App\Models\Buku;
 use App\Models\ItemKarya;
 use App\Http\Resources\BukuResource;
 use App\Http\Resources\ItemKaryaResource;
+use App\Libs\HelperService;
 use Spatie\Async\Pool;
-use App\Services\HelperService;
 use Illuminate\Support\Facades\DB;
 
 class BukuController extends BaseController
 {
-    public function __construct(HelperService $service)
-    {
-        $this->helperService = $service;
-    }
-
     public function index()
     {
         $buku = Buku::all();
@@ -43,8 +38,10 @@ class BukuController extends BaseController
                 'tahun' => 'required',
                 'kategori' => 'required',
                 'isbn' => 'required',
+                'lokasi_id' => 'required',
                 'deskripsi' => 'required'
             ]);
+
             if ($validator->fails()) {
                 return $this->sendError("Lengkapi Data Anda !", $validator->errors(), 400);
             }
@@ -77,7 +74,7 @@ class BukuController extends BaseController
     public function itemhistory($id)
     {
         try {
-           
+
             $result = DB::select("SELECT
             peminjaman_item.karyaitem_id,
             peminjaman_item.tanggal_kembali,
@@ -91,7 +88,7 @@ class BukuController extends BaseController
           peminjaman.id
             LEFT JOIN anggota ON peminjaman.anggotaid = anggota.id
               where karyaitem_id=?  
-              ORDER BY  peminjaman.created_at DESC",[$id]);
+              ORDER BY  peminjaman.created_at DESC", [$id]);
             return $this->sendResponse($result, "Data Tidak Ditemukan !");
         } catch (\Throwable $th) {
             return $this->sendError($th->$th->getMessagge(), [], 400);
@@ -99,7 +96,7 @@ class BukuController extends BaseController
     }
 
 
-    
+
 
 
 
@@ -107,37 +104,46 @@ class BukuController extends BaseController
 
     public function update(Request $request, $id)
     {
-        $input = $request->all();
-        $validator = Validator::make($input, [
-            'kode' => 'required',
-            'judul' => 'required',
-            'penerbit' => 'required',
-            'penulis' => 'required',
-            'kota' => 'required',
-            'tahun' => 'required',
-            'kategori' => 'required',
-            'isbn' => 'required',
-            'deskripsi' => 'required'
-        ]);
+        try {
+            $input = $request->all();
+            $validator = Validator::make($input, [
+                'kode' => 'required',
+                'judul' => 'required',
+                'penerbit' => 'required',
+                'penulis' => 'required',
+                'kota' => 'required',
+                'tahun' => 'required',
+                'kategori' => 'required',
+                'isbn' => 'required',
+                'lokasi_id' => 'required',
+                'deskripsi' => 'required'
+            ]);
 
-        if ($validator->fails()) {
-            return $this->sendError($validator->errors());
+            if ($validator->fails()) {
+                return $this->sendError($validator->errors());
+            }
+
+            $model = Buku::find($id);
+            $model->lokasi_id = $input['lokasi_id'];
+            $model->kode = $input['kode'];
+            $model->judul = $input['judul'];
+            $model->penerbit = $input['penerbit'];
+            $model->penulis = $input['penulis'];
+            $model->kota = $input['kota'];
+            $model->tahun = $input['tahun'];
+            $model->kategori = $input['kategori'];
+            $model->isbn = $input['isbn'];
+            $model->deskripsi = $input['deskripsi'];
+            $model->save();
+
+            return $this->sendResponse(new BukuResource($model), 'Post updated.');
+        } catch (\Throwable $e) {
+            $message = $this->errorMessage($e);
+            if (!$message) {
+                $message = $e->getMessage();
+            }
+            return $this->sendError($message, [], 400);
         }
-
-        $model = Buku::find($id);
-
-        $model->kode = $input['kode'];
-        $model->judul = $input['judul'];
-        $model->penerbit = $input['penerbit'];
-        $model->penulis = $input['penulis'];
-        $model->kota = $input['kota'];
-        $model->tahun = $input['tahun'];
-        $model->kategori = $input['kategori'];
-        $model->isbn = $input['isbn'];
-        $model->deskripsi = $input['deskripsi'];
-        $model->save();
-
-        return $this->sendResponse(new BukuResource($model), 'Post updated.');
     }
 
     public function destroy(Buku $model)
@@ -160,7 +166,7 @@ class BukuController extends BaseController
         $value = new BukuResource($model);
         for ($i = 0; $i < $count; $i++) {
             $lastSerie++;
-            $item = ["jenis_id" => $value->id, "nomorseri" => $model->kode."-".$lastSerie, "jenis" => "buku", "catatan" => ""];
+            $item = ["jenis_id" => $value->id, "nomorseri" => $model->kode . "-" . $lastSerie, "jenis" => "buku", "catatan" => ""];
             $results[] = ItemKarya::create($item);
         }
         return $this->sendResponse(ItemKaryaResource::collection($results), 'Post fetched.');
@@ -189,7 +195,7 @@ class BukuController extends BaseController
     {
         try {
             $input = $request->all();
-            $uploadedImageResponse = $this->helperService->upload($request, 'covers');
+            $uploadedImageResponse = HelperService::upload($request, 'covers');
             $model = Buku::find($id);
             $oldFile = $model->cover;
             $model->cover = $uploadedImageResponse["image_name"];
@@ -198,7 +204,7 @@ class BukuController extends BaseController
                 event(new DeleteFileEvent('covers/' . $oldFile));
             }
             return $this->sendResponse($uploadedImageResponse, 'success',   200);
-        } catch (\Throwable $e) {   
+        } catch (\Throwable $e) {
             $message = $this->errorMessage($e->errorInfo);
             if (!$message) {
                 $message = $e->getMessage();
@@ -210,7 +216,7 @@ class BukuController extends BaseController
     public function uploadBibliografi(Request $request, $id)
     {
         $input = $request->all();
-        $uploadedImageResponse = $this->helperService->upload($request, "bibliografis");
+        $uploadedImageResponse = HelperService::upload($request, "bibliografis");
         $model = Buku::find($id);
         $oldFile = $model->bibliografi;
         $model->bibliografi = $uploadedImageResponse["image_name"];

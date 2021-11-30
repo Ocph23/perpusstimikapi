@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Services;
+namespace App\Libs;
 
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File; 
-use Exception;
 
 class HelperService 
 {
-    public function upload(Request $request, $uploadFolder){
+    public static function upload(Request $request, $uploadFolder){
         try {
 
             $input = $request->all();
@@ -25,10 +24,10 @@ class HelperService
             }
 
             $image = $request->file('image');
-            $image_uploaded_path = $image->store($uploadFolder, 'public');
+            $image_uploaded_path = $image->store($uploadFolder, 'public_uploads');
             $uploadedImageResponse = array(
                 "image_name" => basename($image_uploaded_path),
-                "image_url" => Storage::disk('public')->url($image_uploaded_path),
+                "image_url" => Storage::disk('public_uploads')->url($image_uploaded_path),
                 "mime" => $image->getClientMimeType()
             );
             return $uploadedImageResponse;
@@ -38,7 +37,7 @@ class HelperService
         }
     }
 
-    public function pengaturan(){
+    public static function pengaturan(){
       return  $data[]=["Denda"=>2000,"LamaPinjam"=>3];
     }
 }

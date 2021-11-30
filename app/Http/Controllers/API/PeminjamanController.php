@@ -16,7 +16,7 @@ use App\Http\Resources\PeminjamanResource;
 use App\Http\Resources\ItemKaryaResource as ItemKaryaResource;
 use App\Models\Anggota;
 use App\Models\Pesanan;
-use App\Services\HelperService;
+use App\Models\Setting;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -24,12 +24,6 @@ use Illuminate\Support\Facades\Log;
 
 class PeminjamanController extends BaseController
 {
-
-    public function __construct(HelperService $service)
-    {
-        $this->helperService = $service;
-    }
-
 
     public function index()
     {
@@ -93,8 +87,11 @@ class PeminjamanController extends BaseController
             $model = Peminjaman::create($data);
             $items = [];
             foreach ($data['items'] as $key => $value) {
-                $peraturan = $this->helperService->pengaturan();
-                $tgl = Carbon::now()->addDays($peraturan['LamaPinjam']);
+                $peraturan = Setting::latest()->first();
+                if(!$peraturan){
+                    throw new Exception("Pengaturan Belum Tersedia !");
+                }
+                $tgl = Carbon::now()->addDays($peraturan['lamaSewa']);
                 $karyaitem = ItemKarya::find($value['karyaitemid']);
                 if ($karyaitem && $karyaitem->statuspinjam == 'tersedia') {
                     $items[] = PeminjamanItem::create(['karyaitem_id' => $value['karyaitemid'], 'peminjaman_id' => $model->id, 'tanggal_kembali' => $tgl]);
@@ -107,7 +104,6 @@ class PeminjamanController extends BaseController
             }
             $pesanan->status = 'sukses';
             $pesanan->save();
-
             DB::commit();
             return $this->sendResponse(new PeminjamanResource($model), 'Post created.');
         } catch (\Exception $e) {

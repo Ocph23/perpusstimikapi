@@ -8,6 +8,7 @@ use App\Models\Penelitian;
 use App\Models\ItemKarya;
 use App\Http\Resources\ItemKaryaResource;
 use App\Http\Resources\PenelitianResource;
+use App\Libs\HelperService;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -28,6 +29,7 @@ class PenelitianController extends BaseController
             $input = $request->all();
             $validator = Validator::make($input, [
                 'kode' => 'required' ,
+                'lokasi_id' => 'required' ,
                 'npm' => 'required' ,
                 'penulis' => 'required',
                 'jurusan' => 'required' ,
@@ -71,6 +73,7 @@ class PenelitianController extends BaseController
         $input = $request->all();
         $validator = Validator::make($input, [
             'kode' => 'required' ,
+            'lokasi_id' => 'required' ,
             'npm' => 'required' ,
             'penulis' => 'required',
             'jurusan' => 'required' ,
@@ -89,6 +92,7 @@ class PenelitianController extends BaseController
         $model = Penelitian::find($input['id'])->first();
 
         $model->kode = $input['kode']; 
+        $model->lokasi_id = $input['lokasi_id']; 
         $model->npm = $input['npm']; 
         $model->penulis = $input['penulis'];
         $model->jurusan = $input['jurusan']; 
@@ -131,8 +135,9 @@ class PenelitianController extends BaseController
     
     public function uploadCover(Request $request, $id)
     {
-        $input = $request->all();
-        $uploadedImageResponse =$this->upload($request, 'covers');
+        try {
+            $input = $request->all();
+        $uploadedImageResponse = HelperService::upload($request, 'covers');
         $model = Penelitian::find($id);
         $oldFile = $model->cover;
         $model->cover=$uploadedImageResponse["image_name"];
@@ -141,6 +146,9 @@ class PenelitianController extends BaseController
             event(new DeleteFileEvent('covers/'.$oldFile));
         }
         return $this->sendResponse($uploadedImageResponse, 'success',   200);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
 }

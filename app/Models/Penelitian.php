@@ -22,12 +22,17 @@ class Penelitian extends Model
         'tahun',
         'deskripsi',
         'cover',
+        'lokasi_id',
         'items',
     ];
 
     public function items()
     {
         return $this->hasMany(ItemKarya::class,'jenis_id')->where('jenis','penelitian');
+    }
+
+    public function lokasi(){
+        return $this->hasOne(Lokasi::class,'id','lokasi_id');
     }
     
 }

@@ -27,6 +27,8 @@ class PenelitianResource extends JsonResource
             'tahun' => $this->tahun,
             'deskripsi' => $this->deskripsi ,
             'cover' => $this->cover ,
+            'lokasi_id' => $this->lokasi ,
+            'lokasi' => $this->lokasi ,
             'items' => $this->items ,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

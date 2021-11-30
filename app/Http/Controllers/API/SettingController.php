@@ -11,15 +11,11 @@ use App\Models\ItemKarya;
 use App\Http\Resources\SettingResource;
 use App\Http\Resources\ItemKaryaResource;
 use Spatie\Async\Pool;
-use App\Services\HelperService;
 use Illuminate\Support\Facades\DB;
 
 class SettingController extends BaseController
 {
-    public function __construct(HelperService $service)
-    {
-        $this->helperService = $service;
-    }
+   
 
     public function index()
     {

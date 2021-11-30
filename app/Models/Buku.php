@@ -25,6 +25,7 @@ class Buku extends Model
         'kota',
         'cover',
         'penulis',
+        'lokasi_id',
         'items'
     ];
 
@@ -32,6 +33,11 @@ class Buku extends Model
     public function items()
     {
         return $this->hasMany(ItemKarya::class,'jenis_id')->where('jenis','buku');
+    }
+
+    public function lokasi()
+    {
+        return $this->hasOne(Lokasi::class,'id', 'lokasi_id');
     }
 
 }
