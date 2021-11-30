@@ -31,6 +31,8 @@ Route::post('register', [AuthController::class, 'signup']);
 Route::get('profile', [AuthController::class, 'profile'])->middleware('auth:sanctum');
 Route::get('dashboard', [SettingController::class, 'dashboard']);
 
+Route::get('image/cover/{name}', [SettingController::class, 'cover']);
+Route::get('image/bibliografi/{name}', [SettingController::class, 'bibliografi']);
 //Buku
 Route::get('buku/{id}/tambahbuku/{count}', [BukuController::class, 'tambahbuku'])->name('tambahbuku')->middleware('auth:sanctum');
 Route::post('buku/uploadcover/{id}', [BukuController::class, 'uploadcover'])->name('uploadcover')->middleware('auth:sanctum');

@@ -12,6 +12,7 @@ use App\Http\Resources\SettingResource;
 use App\Http\Resources\ItemKaryaResource;
 use Spatie\Async\Pool;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class SettingController extends BaseController
 {
@@ -150,4 +151,19 @@ class SettingController extends BaseController
 
         return $this->sendResponse($result[0], 'fetched.');
     }
+
+
+    public function cover($fileName){
+        $path = public_path().'/uploads/covers/'.$fileName;
+        return Response::download($path);       
+    }
+
+    public function bibliografi($fileName){
+        $path = public_path().'/uploads/bibliografis/'.$fileName;
+        return Response::download($path); 
+    }
+
+
+
+
 }
