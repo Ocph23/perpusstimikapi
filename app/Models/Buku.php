@@ -28,10 +28,7 @@ class Buku extends Model
         'lokasi_id',
     ];
 
-    protected $appends = [
-        'items'
-    ];
-
+  
 
     public function items()
     {
