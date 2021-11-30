@@ -10,7 +10,7 @@ use App\Models\ItemKarya;
 class Buku extends Model
 {
 
-    protected $table = 'Buku';
+    protected $table = 'buku';
 
     protected $fillable = [
         'judul',
@@ -26,6 +26,9 @@ class Buku extends Model
         'cover',
         'penulis',
         'lokasi_id',
+    ];
+
+    protected $appends = [
         'items'
     ];
 
