@@ -146,8 +146,9 @@ class BukuController extends BaseController
         }
     }
 
-    public function destroy(Buku $model)
+    public function destroy($id)
     {
+        $model = Buku::where('id',$id)->get()->first();
         $model->delete();
         return $this->sendResponse([], 'Post deleted.');
     }

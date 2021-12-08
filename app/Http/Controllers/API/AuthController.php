@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Anggota;
 use App\Http\Controllers\API\BaseController;
+use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 
@@ -37,9 +38,15 @@ class AuthController extends BaseController
 
     public function signup(Request $request)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $input = $request->all();
+
+            if($input['email']=='' || $input['email']=='mahasiswa@mail.com' || $input['email']=='stimiksepnop@mail.com' ){
+                //throw new Exception("Silahkan Ubah Email Anda di 'SIMAK' Sebelum Mendaftar !");
+                $input['email']= $input['username']."@mail.com";
+            }
+
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email',
                 'password' => 'required',
@@ -47,7 +54,7 @@ class AuthController extends BaseController
             ]);
 
             if ($validator->fails()) {
-                return $this->sendError('Error validation', $validator->errors());
+                return $this->sendError('Error validation', $validator->errors(),400);
             }
 
             $input = $request->all();
@@ -62,8 +69,8 @@ class AuthController extends BaseController
             DB::commit();
             return $this->sendResponse($success, 'User created successfully.');
         } catch (\Exception $e) {
-            DB::rollBack();
             $message = $this->errorMessage($e);
+            DB::rollBack();
             return $this->sendError($message, [], 400);
         }
     }

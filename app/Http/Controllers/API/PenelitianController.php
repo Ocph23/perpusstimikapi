@@ -107,8 +107,9 @@ class PenelitianController extends BaseController
         return $this->sendResponse(new PenelitianResource($model), 'Post updated.');
     }
    
-    public function destroy(Penelitian $model)
+    public function destroy($id)
     {
+        $model = Penelitian::where('id',$id)->get()->first();
         $model->delete();
         return $this->sendResponse([], 'Post deleted.');
     }
@@ -116,8 +117,8 @@ class PenelitianController extends BaseController
 
     public function tambahPenelitian($id,$count){
         $model = Penelitian::find($id);
-        $item = $model->items->last();
-        $lastSerie= $item ? $item->nomorseri : 0;
+        $item = $model->items->count();
+        $lastSerie = $item ? $item : 0;
         if (is_null($model)) {
             return $this->sendError('Post does not exist.');
         }
@@ -126,7 +127,8 @@ class PenelitianController extends BaseController
         $value=new PenelitianResource($model);
         for ($i=0; $i < $count; $i++) { 
             $lastSerie++;
-            $item = ["jenis_id"=> $value->id, "nomorseri"=> $lastSerie, "jenis"=> "penelitian", "catatan"=> ""];
+            $item = ["jenis_id" => $value->id, "nomorseri" => $model->kode . "-" . $lastSerie, "jenis" => "penelitian", "catatan" => ""];
+            
             $results[]=ItemKarya::create($item);
         }
         return $this->sendResponse(ItemKaryaResource::collection($results), 'Post fetched.');
