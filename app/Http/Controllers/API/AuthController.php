@@ -42,11 +42,13 @@ class AuthController extends BaseController
         try {
             $input = $request->all();
 
-            if($input['email']=='' || $input['email']=='mahasiswa@mail.com' || $input['email']=='stimiksepnop@mail.com' ){
-                //throw new Exception("Silahkan Ubah Email Anda di 'SIMAK' Sebelum Mendaftar !");
-                $input['email']= $input['username']."@mail.com";
-            }
-
+            // if($input['email']=='' || $input['email']=='mahasiswa@mail.com' || $input['email']=='stimiksepnop@mail.com' ){
+            //     //throw new Exception("Silahkan Ubah Email Anda di 'SIMAK' Sebelum Mendaftar !");
+            //     $input['email']= $input['username']."@mail.com";
+            // }else{
+            // }
+            $input['email']= $input['username']."@mail.com";
+            
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email',
                 'password' => 'required',
