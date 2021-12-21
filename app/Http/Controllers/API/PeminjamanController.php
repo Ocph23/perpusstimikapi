@@ -119,11 +119,13 @@ class PeminjamanController extends BaseController
 
         $model = Peminjaman::find($id);
         if ($model) {
-            $model->anggota = $model->anggota;
+            $model->anggota = new AnggotaResource( $model->anggota);
             $model->items = $model->items;
-            foreach ($model->items as $key => $value) {
-                $result = $value->ItemKarya->parent;
-                $value->ItemKarya = new ItemKaryaResource($value->ItemKarya);
+            foreach ($model->items as $key => $v) {
+                $v->ItemKarya = $v->ItemKarya;
+                $v->ItemKarya->parent = $v->ItemKarya->parent;
+                $v->ItemKarya = new ItemKaryaResource($v->ItemKarya);
+                $aaa=1;
             }
         }
         return $this->sendResponse($model == null ? $model : new PeminjamanResource($model), 'Posts fetched.');

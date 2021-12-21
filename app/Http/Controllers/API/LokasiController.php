@@ -74,8 +74,9 @@ class LokasiController extends BaseController
         return $this->sendResponse(new LokasiResource($model), 'Post updated.');
     }
 
-    public function destroy(Lokasi $model)
+    public function destroy($id)
     {
+        $model = Lokasi::where('id',$id)->get()->first();
         $model->delete();
         return $this->sendResponse([], 'Post deleted.');
     }

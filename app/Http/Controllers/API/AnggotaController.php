@@ -96,7 +96,7 @@ class AnggotaController extends BaseController
     {
         try {
 
-            $model = Anggota::find($id)->first();
+            $model = Anggota::where('id', $id)->first();
             if (!$model) {
                 throw new Exception("Data Anggota Tidak Ditemukan !");
             }

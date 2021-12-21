@@ -26,6 +26,11 @@ class AuthController extends BaseController
                 $success['name'] =  $authUser->name;
                 $success['roles'] =  $roles;
 
+                $anggota=Anggota::where("user_id", $authUser->id)->first();    
+                if($anggota && $anggota->aktif=="tidak"){
+                    throw new Exception("Maaf Akun Anda Tidak Aktif, Silahkan Hubungi Administrator !");                        
+                }
+
                 return $this->sendResponse($success, 'User signed in');
             } else {
                 return $this->sendError('Unauthorised.', ['error' => 'Unauthorised'], 401);
@@ -44,7 +49,7 @@ class AuthController extends BaseController
 
             if($input['email']=='' || $input['email']=='mahasiswa@mail.com' || $input['email']=='stimiksepnop@mail.com' ){
                 //throw new Exception("Silahkan Ubah Email Anda di 'SIMAK' Sebelum Mendaftar !");
-                $input['email']= $input['username']."@mail.com";
+                $input['email']= $input['username']."@mail.com";    
             }
             
             $validator = Validator::make($request->all(), [
