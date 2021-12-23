@@ -78,7 +78,6 @@ class PesananController extends BaseController
                 return $this->sendError("Lengkapi Data Anda !", $validator->errors(), 400); 
             }
             $input['kode'] = $this->generateRandomString();
-            $input['tanggal'] = new DateTime();
             $input['status'] = 'baru';
 
 
