@@ -63,3 +63,5 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::resource('lokasi', LokasiController::class);
     Route::resource('setting', SettingController::class);
 });
+
+

@@ -14,6 +14,7 @@ class Pesanan extends Model
         'kode',
         'anggotaid',
         'tanggal',
+        'status'
        
     ];
 
