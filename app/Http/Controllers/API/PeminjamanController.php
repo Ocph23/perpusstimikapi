@@ -15,12 +15,15 @@ use App\Http\Resources\AnggotaResource;
 use App\Http\Resources\PeminjamanResource;
 use App\Http\Resources\ItemKaryaResource as ItemKaryaResource;
 use App\Models\Anggota;
+use App\Models\Buku;
+use App\Models\Penelitian;
 use App\Models\Pesanan;
 use App\Models\Setting;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use SebastianBergmann\Environment\Console;
 
 class PeminjamanController extends BaseController
 {
@@ -125,7 +128,7 @@ class PeminjamanController extends BaseController
                 $v->ItemKarya = $v->ItemKarya;
                 $v->ItemKarya->parent = $v->ItemKarya->parent;
                 $v->ItemKarya = new ItemKaryaResource($v->ItemKarya);
-                $aaa=1;
+
             }
         }
         return $this->sendResponse($model == null ? $model : new PeminjamanResource($model), 'Posts fetched.');

@@ -29,7 +29,6 @@ class PesananController extends BaseController
                 $value->anggota = new AnggotaResource($value->anggota);
                 $value->items = $value->items;
             }
-            $result = PesananResource::collection($models);
             return $this->sendResponse(PesananResource::collection($models), 'Posts fetched.');
         } catch (\Throwable $th) {
            $vars = 1;
@@ -80,6 +79,8 @@ class PesananController extends BaseController
             }
             $input['kode'] = $this->generateRandomString();
             $input['tanggal'] = new DateTime();
+            $input['status'] = 'baru';
+
 
             $model = Pesanan::create($input);
             $items = [];
