@@ -34,9 +34,9 @@ class PeminjamanController extends BaseController
         $anggota = Anggota::where("user_id", $userid)->first();
         $models = null;
         if ($anggota) {
-            $models = Peminjaman::where("anggotaid", $anggota->id)->get();
+            $models = Peminjaman::where("anggotaid", $anggota->id)->orderBy('id','Desc')->get();
         } else {
-            $models = Peminjaman::all();
+            $models = Peminjaman::orderBy('id','Desc')->get();
         }
         foreach ($models as $key => $value) {
             $value->anggota = new AnggotaResource($value->anggota);

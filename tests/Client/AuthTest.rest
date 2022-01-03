@@ -73,7 +73,7 @@ Authorization:
 
 {
     "username": "201511099",
-    "password": "Sony@77"
+    "password": "stimik1011"
 }
 
 ###

@@ -1,5 +1,6 @@
-@controller=http://192.168.1.9/perpusstimik/webapp/public/api/pesanan
-@token = Bearer 1|BssOV3GZr54gl9rMYGkV34d6TLAlQpEmV0N6qB40
+//@controller=http://192.168.1.9/perpusstimik/webapp/public/api/pesanan
+@controller=http://localhost:8000/api/pemesanan
+@token = Bearer 72|ywd0sne4iixbe1WYv9Fm0W3tEW95xVHi4aQwaEcO
 
 
 get {{controller}}  HTTP/1.1
@@ -22,7 +23,7 @@ Authorization: {{token}}
 {
     "kode": "H1252525",
     "anggotaid":1,
-    "items":[{"karyaitemid":1}],
+    "items":[{"KaryaItemId":1}],
     "tanggal": "2021-09-21"
 }
 
