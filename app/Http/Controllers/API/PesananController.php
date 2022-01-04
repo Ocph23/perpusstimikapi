@@ -13,6 +13,7 @@ use App\Models\ItemKarya;
 use App\Http\Resources\PesananResource;
 use App\Http\Resources\ItemKaryaResource as ItemKaryaResource;
 use App\Models\Anggota;
+use App\Models\Peminjaman;
 use App\Models\PesananItem;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -24,12 +25,12 @@ class PesananController extends BaseController
     public function index()
     {
         try {
+            app()->make("expire");
             $models = Pesanan::orderBy('id','Desc')->get();
             foreach ($models as $key => $value) {
                 $value->anggota = new AnggotaResource($value->anggota);
                 $value->items = $value->items;
             }
-            app()->make("expire");
             return $this->sendResponse(PesananResource::collection($models), 'Posts fetched.');
         } catch (\Throwable $th) {
            $vars = 1;
@@ -70,33 +71,47 @@ class PesananController extends BaseController
             $anggota = Anggota::where("user_id", $userid)->first();
             $input = $request->all();
             if($anggota){
+
+                $pesananx = Pesanan::
+                where("anggotaid", $anggota->id)
+                ->where("status", 'baru')
+                ->first()  ;
+                if($pesananx)
+                    throw new Exception("Masih Ada Pesanan Anda Yang Belum Di Proses !");
+
+                $pemijamanx = Peminjaman::
+                where("anggotaid", $anggota->id)
+                ->where("status", 'sukses')
+                ->first()  ;
+
+                if($pemijamanx)
+                    throw new Exception("Masih Ada Buku/Penelitian  Yang Belum Anda Kembalikan !");
+
                 $input['anggotaid'] =$anggota->id;
             }
             $validator = Validator::make($input, [
                 'items' => 'required'
             ]);
             if ($validator->fails()) {
-                return $this->sendError("Lengkapi Data Anda !", $validator->errors(), 400); 
+                throw new Exception("Validator ".   $validator->errors());
             }
             $input['kode'] = $this->generateRandomString();
             $input['tanggal'] = new DateTime();
             $input['status'] = 'baru';
-
-
             $model = Pesanan::create($input);
             $items = [];
             foreach ($input['items'] as $key => $value) {
                 $tgl = new DateTime($model->created_at);
-                $karyaItemId=$value['KaryaItemId'];
+                $karyaItemId=$value['karyaItemId'];
                 $karyaItem = ItemKarya::find($karyaItemId);
                 if(!$karyaItem){
                     throw new Exception($karyaItem->nomorseri.  "Tidak Ditemukan !");
                 }
-
                 if($karyaItem && $karyaItem->statuspinjam!='tersedia'){
                     throw new Exception($karyaItem->nomorseri." Tidak Tersedia/ Sedang Dipinjam !");
                 }
                 $items[] = PesananItem::create(['karyaitemid' => $karyaItemId, 'pesananid' => $model->id]);
+                $karyaItem->statuspinjam='dipesan';
                 $karyaItem->save();
             }
             $model->anggota = $model->anggota;

@@ -16,8 +16,8 @@ class AnggotaController extends BaseController
 {
     public function index()
     {
-        $model = Anggota::all();
         app()->make("expire");
+        $model = Anggota::all();
         return $this->sendResponse(AnggotaResource::collection($model), 'Posts fetched.');
     }
 

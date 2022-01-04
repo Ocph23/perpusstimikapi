@@ -18,11 +18,11 @@ class BukuController extends BaseController
 {
     public function index()
     {
+        app()->make("expire");
         $buku = Buku::all();
         foreach ($buku as $key => $value) {
             $value['items'] = ItemKaryaResource::collection($value->items);
         }
-        app()->make("expire");
         return $this->sendResponse(BukuResource::collection($buku), 'Posts fetched.');
     }
 
@@ -95,13 +95,6 @@ class BukuController extends BaseController
             return $this->sendError($th->$th->getMessagge(), [], 400);
         }
     }
-
-
-
-
-
-
-
 
     public function update(Request $request, $id)
     {

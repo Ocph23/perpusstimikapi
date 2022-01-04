@@ -16,11 +16,11 @@ class PenelitianController extends BaseController
 {
     public function index()
     {
+        app()->make("expire");
         $penelitian = Penelitian::all();
         foreach ($penelitian as $key => $value) {
             $value['items']= ItemKaryaResource::collection($value->items);
         }
-        app()->make("expire");
         return $this->sendResponse( PenelitianResource::collection($penelitian), 'Posts fetched.');
     }
     

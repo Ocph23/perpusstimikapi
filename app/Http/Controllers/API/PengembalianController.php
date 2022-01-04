@@ -29,12 +29,12 @@ class PengembalianController extends BaseController
 
     public function index()
     {
+        app()->make("expire");
         $models = Pengembalian::all();
         foreach ($models as $key => $value) {
             $value->peminjaman = new PeminjamanResource($value->peminjaman);
             $value->items = $value->items;
         }
-        app()->make("expire");
         return $this->sendResponse(PengembalianResource::collection($models), 'Posts fetched.');
     }
 

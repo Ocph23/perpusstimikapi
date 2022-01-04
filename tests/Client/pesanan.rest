@@ -1,6 +1,6 @@
 //@controller=http://192.168.1.9/perpusstimik/webapp/public/api/pesanan
 @controller=http://localhost:8000/api/pemesanan
-@token = Bearer 72|ywd0sne4iixbe1WYv9Fm0W3tEW95xVHi4aQwaEcO
+@token = Bearer 117|j79ogZFkFV5spYTeUXwCNteaGbfXbOP7Jl1dBF8x
 
 
 get {{controller}}  HTTP/1.1
@@ -20,13 +20,7 @@ POST {{controller}}  HTTP/1.1
 Content-Type: application/json
 Authorization: {{token}}
 
-{
-    "kode": "H1252525",
-    "anggotaid":1,
-    "items":[{"KaryaItemId":1}],
-    "tanggal": "2021-09-21"
-}
-
+{"id":0,"kode":null,"anggotaId":1,"anggota":null,"items":[{"id":0,"pesananId":0,"KaryaItemId":1,"itemKarya":{"id":1,"nomorSeri":"BK0001-1","jenis_id":1,"jenis":0,"keadaan":0,"statuspinjam":0,"catatan":"","updated_at":"2022-01-02T06:58:28Z","created_at":"2021-11-30T04:12:08Z","nomorview":null,"parent":{"id":1,"kode":"TPAS","judul":"TEKNIK PERANCANGAN ARSITEKTUR SISTEM INFORMASI","penulis":"FERI SULIANTA","tahun":2017,"deskripsi":"DALAM BUKU INI ANDA AKAN DI PERKENALKAN TEKNIK MODERN PERANCANGAN ARSITEKTUR SISTEM INFORMASI","items":null,"cover":"oBNjt3en9ly5sRMYWQFTqLdEDhDfgrbpjdc5CWC9.jpg","created_at":"2021-12-04T11:36:07Z","updated_at":"2021-12-23T12:09:58Z","typeKarya":0,"coverSource":"http://perpusstimikapi.stimiksepnop.ac.id/api/image/cover/oBNjt3en9ly5sRMYWQFTqLdEDhDfgrbpjdc5CWC9.jpg"}},"created_at":"0001-01-01T00:00:00","updated_at":"0001-01-01T00:00:00"},{"id":0,"pesananId":0,"karyaItemId":4,"itemKarya":{"id":4,"nomorSeri":"SK0001-1","jenis_id":1,"jenis":1,"keadaan":0,"statuspinjam":0,"catatan":"","updated_at":"2021-12-30T01:42:51Z","created_at":"2021-11-30T04:13:10Z","nomorview":null,"parent":{"id":1,"kode":"TA-201211044","judul":"PENERAPAN ANALITYCAL HIERARKY PROCES AHP DALAM SISTEM PENDUKUNG KEPUTUSAN SPK PENILAIAN KINERJA GURU PADA SMP N 3 JAYAPURA","penulis":"THERESIA PANGALINAN","tahun":2016,"deskripsi":"PENERAPAN ANALITYCAL HIERARKY PROCES AHP DALAM SISTEM PENDUKUNG KEPUTUSAN SPK PENILAIAN KINERJA GURU PADA SMP N 3 JAYAPURA","items":null,"cover":"oxKCFtYttR98e9DkwqEW1uc3rgMrrpDA0HlcUwpf.jpg","created_at":"2021-12-15T11:14:11Z","updated_at":"2021-12-15T11:16:00Z","typeKarya":0,"coverSource":"http://perpusstimikapi.stimiksepnop.ac.id/api/image/cover/oxKCFtYttR98e9DkwqEW1uc3rgMrrpDA0HlcUwpf.jpg"}},"created_at":"0001-01-01T00:00:00","updated_at":"0001-01-01T00:00:00"}],"status":0,"created_at":"0001-01-01T00:00:00","updated_at":"0001-01-01T00:00:00"}
 ###
 
 get {{controller}}/1/tambahbuku/2  HTTP/1.1

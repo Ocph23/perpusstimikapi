@@ -19,8 +19,8 @@ class LokasiController extends BaseController
 
     public function index()
     {
-        $lokasi = Lokasi::all();
         app()->make("expire");
+        $lokasi = Lokasi::all();
         return $this->sendResponse(LokasiResource::collection($lokasi), 'Posts fetched.');
     }
 

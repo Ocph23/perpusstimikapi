@@ -18,6 +18,7 @@ class AuthController extends BaseController
     public function signin(Request $request)
     {
         try {
+            app()->make("expire");
             $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
             if (Auth::attempt([$fieldType => $request->username, 'password' => $request->password])) {
                 $authUser = Auth::user();
@@ -30,7 +31,7 @@ class AuthController extends BaseController
                 if($anggota && $anggota->aktif=="tidak"){
                     throw new Exception("Maaf Akun Anda Tidak Aktif, Silahkan Hubungi Administrator !");                        
                 }
-                app()->make("expire");    
+                  
                 return $this->sendResponse($success, 'User signed in');
             } else {
                 return $this->sendError('Unauthorised.', ['error' => 'Unauthorised'], 401);

@@ -30,6 +30,7 @@ class PeminjamanController extends BaseController
 
     public function index()
     {
+        app()->make("expire");
         $userid = Auth::id();
         $anggota = Anggota::where("user_id", $userid)->first();
         $models = null;
@@ -49,7 +50,6 @@ class PeminjamanController extends BaseController
 
             }         
         }
-        app()->make("expire");
         return $this->sendResponse(PeminjamanResource::collection($models), 'Posts fetched.');
     }
 
@@ -95,12 +95,11 @@ class PeminjamanController extends BaseController
                 }
                 $tgl = Carbon::now()->addDays($peraturan['lamaSewa']);
                 $karyaitem = ItemKarya::find($value['karyaitemid']);
-                if ($karyaitem && $karyaitem->statuspinjam == 'tersedia') {
+                if ($karyaitem && $karyaitem->statuspinjam == 'dipesan') {
                     $items[] = PeminjamanItem::create(['karyaitem_id' => $value['karyaitemid'], 'peminjaman_id' => $model->id, 'tanggal_kembali' => $tgl]);
                     $karyaitem->statuspinjam = 'dipinjam';
                     $karyaitem->save();
                 } else {
-                    $karyaitem->parent = $karyaitem->parent;
                     throw new Exception('Buku atau Penelitian Judul ' . $karyaitem->parent->judul . ' tidak Tersedia !');
                 }
             }

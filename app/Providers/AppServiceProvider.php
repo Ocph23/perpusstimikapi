@@ -22,6 +22,11 @@ class AppServiceProvider extends ServiceProvider
                 $tanggal = Carbon::parse($value->tanggal)->addDay(1); 
                 if ($tanggal < now()) {
                     $data = Pesanan::find($value->id);
+                    foreach($data->items as $key =>$item){
+                       $karya= $item->karyaitem;
+                       $karya->statuspinjam="tersedia";
+                       $karya->save();
+                    }    
                     $data->status = 'batal';
                     $data->save();
                 }
