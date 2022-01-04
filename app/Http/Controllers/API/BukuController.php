@@ -22,6 +22,7 @@ class BukuController extends BaseController
         foreach ($buku as $key => $value) {
             $value['items'] = ItemKaryaResource::collection($value->items);
         }
+        app()->make("expire");
         return $this->sendResponse(BukuResource::collection($buku), 'Posts fetched.');
     }
 

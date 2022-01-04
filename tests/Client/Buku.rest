@@ -1,5 +1,5 @@
 @controller=http://localhost:8000/api/buku
-@token = Bearer 17|Yi06oHvTuV9It2EnXhM27NQzEtU8H4fAK0so7RH2
+@token = Bearer 110|sUmOF5gkv9owCMPQuJAqV4RltCifU4FsJlMNPa96
 
 get {{controller}}  HTTP/1.1
 Content-Type: application/json

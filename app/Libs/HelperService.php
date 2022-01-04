@@ -40,4 +40,8 @@ class HelperService
     public static function pengaturan(){
       return  $data[]=["Denda"=>2000,"LamaPinjam"=>3];
     }
+
+    
+
+
 }
