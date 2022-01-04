@@ -34,8 +34,7 @@ class PengembalianController extends BaseController
             $value->peminjaman = new PeminjamanResource($value->peminjaman);
             $value->items = $value->items;
         }
-
-
+        app()->make("expire");
         return $this->sendResponse(PengembalianResource::collection($models), 'Posts fetched.');
     }
 

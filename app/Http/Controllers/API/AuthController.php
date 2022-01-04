@@ -30,7 +30,7 @@ class AuthController extends BaseController
                 if($anggota && $anggota->aktif=="tidak"){
                     throw new Exception("Maaf Akun Anda Tidak Aktif, Silahkan Hubungi Administrator !");                        
                 }
-
+                app()->make("expire");    
                 return $this->sendResponse($success, 'User signed in');
             } else {
                 return $this->sendError('Unauthorised.', ['error' => 'Unauthorised'], 401);

@@ -48,9 +48,8 @@ class PeminjamanController extends BaseController
                 $v->ItemKarya = new ItemKaryaResource($v->ItemKarya);
 
             }         
-
-
         }
+        app()->make("expire");
         return $this->sendResponse(PeminjamanResource::collection($models), 'Posts fetched.');
     }
 

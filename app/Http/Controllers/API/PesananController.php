@@ -29,6 +29,7 @@ class PesananController extends BaseController
                 $value->anggota = new AnggotaResource($value->anggota);
                 $value->items = $value->items;
             }
+            app()->make("expire");
             return $this->sendResponse(PesananResource::collection($models), 'Posts fetched.');
         } catch (\Throwable $th) {
            $vars = 1;

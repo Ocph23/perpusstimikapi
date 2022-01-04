@@ -20,6 +20,7 @@ class PenelitianController extends BaseController
         foreach ($penelitian as $key => $value) {
             $value['items']= ItemKaryaResource::collection($value->items);
         }
+        app()->make("expire");
         return $this->sendResponse( PenelitianResource::collection($penelitian), 'Posts fetched.');
     }
     
