@@ -50,8 +50,16 @@ Route::get('peminjaman/byKaryaItemId/{id}', [PeminjamanController::class, 'byKar
 Route::get('setting/last', [SettingController::class, 'getlast'])->name('getlast')->middleware('auth:sanctum');
 Route::get('pemesanan/mine', [PesananController::class, 'getmine'])->name('getmine')->middleware('auth:sanctum');
 
+
 //anggota
 Route::get('anggota/updatestatus/{id}', [AnggotaController::class, 'updatestatus'])->name('updatestatus')->middleware('auth:sanctum');
+
+Route::get('setting/bookandpenelitian', [SettingController::class, 'bookandpenelitian'])->name('bookandpenelitian')->middleware('auth:sanctum');
+
+
+//pemesanan
+Route::post('pemesanan/andpeminjaman', [PesananController::class, 'andpeminjaman'])->name('andpeminjaman')->middleware('auth:sanctum');
+
 
 Route::middleware('auth:sanctum')->group( function () {
     Route::resource('anggota', AnggotaController::class);

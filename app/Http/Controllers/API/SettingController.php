@@ -5,11 +5,15 @@ namespace App\Http\Controllers\API;
 use App\Events\DeleteFileEvent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController;
+use App\Http\Resources\BukuResource;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Setting;
 use App\Models\ItemKarya;
 use App\Http\Resources\SettingResource;
 use App\Http\Resources\ItemKaryaResource;
+use App\Http\Resources\PenelitianResource;
+use App\Models\Buku;
+use App\Models\Penelitian;
 use Spatie\Async\Pool;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -22,6 +26,27 @@ class SettingController extends BaseController
     {
         $Setting = Setting::all();
         return $this->sendResponse(SettingResource::collection($Setting), 'Posts fetched.');
+    }
+
+
+    public function bookandpenelitian()
+    {
+        app()->make("expire");
+        $buku = Buku::all();
+        $penelitian = Penelitian::all();
+        $datas=[];
+
+        foreach (BukuResource::collection($buku) as $key => $value) {
+            $value['items'] = ItemKaryaResource::collection($value->items);
+            $datas[]=$value;
+        }
+        
+        foreach (PenelitianResource::collection($penelitian) as $key => $value) {
+            $value['items'] = ItemKaryaResource::collection($value->items);
+            $datas[]=$value;
+        }
+
+        return $this->sendResponse($datas, 'Posts fetched.');
     }
 
     public function store(Request $request)

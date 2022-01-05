@@ -14,7 +14,10 @@ use App\Http\Resources\PesananResource;
 use App\Http\Resources\ItemKaryaResource as ItemKaryaResource;
 use App\Models\Anggota;
 use App\Models\Peminjaman;
+use App\Models\PeminjamanItem;
 use App\Models\PesananItem;
+use App\Models\Setting;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -123,6 +126,106 @@ class PesananController extends BaseController
             return $this->sendError($message, [], 400);
         }
     }
+
+
+    public function andpeminjaman(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+
+            $userid = Auth::id();
+            $input = $request->all();
+            $anggota = $input["anggota"];
+            if($anggota){
+
+                $pesananx = Pesanan::
+                where("anggotaid", $anggota['id'])
+                ->where("status", 'baru')
+                ->first()  ;
+                if($pesananx)
+                    throw new Exception("Masih Ada Pesanan Anda Yang Belum Di Proses !");
+
+                $pemijamanx = Peminjaman::
+                where("anggotaid", $anggota['id'])
+                ->where("status", 'sukses')
+                ->first()  ;
+
+                if($pemijamanx)
+                    throw new Exception("Masih Ada Buku/Penelitian  Yang Belum  Dikembalikan !");
+
+                $input['anggotaid'] =$anggota['id'];
+            }
+            $validator = Validator::make($input, [
+                'items' => 'required'
+            ]);
+            if ($validator->fails()) {
+                throw new Exception("Validator ".   $validator->errors());
+            }
+            $input['kode'] = $this->generateRandomString();
+            $input['tanggal'] = new DateTime();
+            $input['status'] = 'baru';
+            $model = Pesanan::create($input);
+            $items = [];
+            foreach ($input['items'] as $key => $value) {
+                $tgl = new DateTime($model->created_at);
+                $karyaItemId=$value['karyaItemId'];
+                $karyaItem = ItemKarya::find($karyaItemId);
+                if(!$karyaItem){
+                    throw new Exception($karyaItem->nomorseri.  "Tidak Ditemukan !");
+                }
+                if($karyaItem && $karyaItem->statuspinjam!='tersedia'){
+                    throw new Exception($karyaItem->nomorseri." Tidak Tersedia/ Sedang Dipinjam !");
+                }
+                $items[] = PesananItem::create(['karyaitemid' => $karyaItemId, 'pesananid' => $model->id]);
+                $karyaItem->statuspinjam='dipesan';
+                $karyaItem->save();
+            }
+
+            ///Create Peminjaman
+            
+            $pesanan = $model;
+            if ($pesanan != null)
+                $data['items'] = $pesanan->items;
+            else
+                throw new Exception('Data Pesanan Tidak Ditemukan !');
+
+
+            if (!$pesanan->items) {
+                throw new Exception('Buku yang ingin dipinjam belum ada !');
+            }
+            $data["keterangan"] = "";
+            $data["status"] = "sukses";
+            $data["anggotaid"]=$pesanan["anggotaid"];
+            $model1 = Peminjaman::create($data);
+            $items = [];
+            foreach ($data['items'] as $key => $value) {
+                $peraturan = Setting::latest()->first();
+                if(!$peraturan){
+                    throw new Exception("Pengaturan Belum Tersedia !");
+                }
+                $tgl = Carbon::now()->addDays($peraturan['lamaSewa']);
+                $nn=$value['karyaitemid'];
+                $karyaitem = ItemKarya::find($nn);
+                if ($karyaitem && $karyaitem->statuspinjam == 'dipesan') {
+                    $items[] = PeminjamanItem::create(['karyaitem_id' => $value['karyaitemid'], 'peminjaman_id' => $model1->id, 'tanggal_kembali' => $tgl]);
+                    $karyaitem->statuspinjam = 'dipinjam';
+                    $karyaitem->save();
+                } else {
+                    throw new Exception('Buku atau Penelitian Judul ' . $karyaitem->parent->judul . ' tidak Tersedia !');
+                }
+            }
+            $pesanan->status = 'sukses';
+            $pesanan->save();
+
+            DB::commit();
+            return $this->sendResponse(new PesananResource($model1), 'Post created.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $message = $this->errorMessage($e);
+            return $this->sendError($message, [], 400);
+        }
+    }
+
 
     public function show($id)
     {
