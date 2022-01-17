@@ -35,20 +35,19 @@ class PeminjamanController extends BaseController
         $anggota = Anggota::where("user_id", $userid)->first();
         $models = null;
         if ($anggota) {
-            $models = Peminjaman::where("anggotaid", $anggota->id)->orderBy('id','Desc')->get();
+            $models = Peminjaman::where("anggotaid", $anggota->id)->orderBy('id', 'Desc')->get();
         } else {
-            $models = Peminjaman::orderBy('id','Desc')->get();
+            $models = Peminjaman::orderBy('id', 'Desc')->get();
         }
         foreach ($models as $key => $value) {
             $value->anggota = new AnggotaResource($value->anggota);
             $value->items = $value->items;
 
-            foreach($value->items as $k=>$v){
+            foreach ($value->items as $k => $v) {
                 $v->ItemKarya = $v->ItemKarya;
                 $v->ItemKarya->parent = $v->ItemKarya->parent;
                 $v->ItemKarya = new ItemKaryaResource($v->ItemKarya);
-
-            }         
+            }
         }
         return $this->sendResponse(PeminjamanResource::collection($models), 'Posts fetched.');
     }
@@ -60,10 +59,10 @@ class PeminjamanController extends BaseController
 
         try {
 
-         
+
             $input = $request->all();
             $validator = Validator::make($input, [
-                 'pesananid' => 'required',
+                'pesananid' => 'required',
                 // 'penerbit' => 'required'
             ]);
 
@@ -85,12 +84,12 @@ class PeminjamanController extends BaseController
 
             $data["keterangan"] = "";
             $data["status"] = "sukses";
-            $data["anggotaid"]=$pesanan["anggotaid"];
+            $data["anggotaid"] = $pesanan["anggotaid"];
             $model = Peminjaman::create($data);
             $items = [];
             foreach ($data['items'] as $key => $value) {
                 $peraturan = Setting::latest()->first();
-                if(!$peraturan){
+                if (!$peraturan) {
                     throw new Exception("Pengaturan Belum Tersedia !");
                 }
                 $tgl = Carbon::now()->addDays($peraturan['lamaSewa']);
@@ -120,13 +119,12 @@ class PeminjamanController extends BaseController
 
         $model = Peminjaman::find($id);
         if ($model) {
-            $model->anggota = new AnggotaResource( $model->anggota);
+            $model->anggota = new AnggotaResource($model->anggota);
             $model->items = $model->items;
             foreach ($model->items as $key => $v) {
                 $v->ItemKarya = $v->ItemKarya;
                 $v->ItemKarya->parent = $v->ItemKarya->parent;
                 $v->ItemKarya = new ItemKaryaResource($v->ItemKarya);
-
             }
         }
         return $this->sendResponse($model == null ? $model : new PeminjamanResource($model), 'Posts fetched.');
@@ -160,13 +158,12 @@ class PeminjamanController extends BaseController
     public function byKaryaItemId($id)
     {
         try {
-            
-            $itemKarya = ItemKarya::where('nomorseri', $id)
-                ->first();
-            if(!$itemKarya)
+
+            $itemKarya = ItemKarya::where('nomorseri', $id)->first();
+            if (!$itemKarya)
                 throw new Exception('Item Buku tidak ditemukan !');
 
-            $dataItem = PeminjamanItem::where('karyaitem_id', $itemKarya->id)
+            $dataItem = PeminjamanItem::where('karyaitem_id', $itemKarya['id'])
                 ->where('statuskembali', 'belum')
                 ->first();
 
@@ -189,5 +186,4 @@ class PeminjamanController extends BaseController
             return $this->sendError($message, [], 400);
         }
     }
-
 }
